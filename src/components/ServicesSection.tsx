@@ -13,7 +13,7 @@ const services = [
   },
 ];
 
-const ServicesSection = () => {
+const ServicesSection = ({ onBookNow }: { onBookNow?: () => void }) => {
   return (
     <section id="services" className="py-20 md:py-28 px-6 bg-secondary">
       <div className="max-w-6xl mx-auto">
@@ -28,9 +28,9 @@ const ServicesSection = () => {
               <p className="text-muted-foreground font-body text-sm leading-relaxed">
                 {service.description}
               </p>
-              <a href="#" className="btn-beauty text-[10px] inline-block mt-2">
+              <button onClick={onBookNow} className="btn-beauty text-[10px] inline-block mt-2">
                 Book Now
-              </a>
+              </button>
             </div>
           ))}
         </div>

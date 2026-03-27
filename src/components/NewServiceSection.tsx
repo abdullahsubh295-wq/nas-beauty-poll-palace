@@ -1,6 +1,6 @@
 import heroImage from "@/assets/hero-beauty.jpg";
 
-const NewServiceSection = () => {
+const NewServiceSection = ({ onBookNow }: { onBookNow?: () => void }) => {
   return (
     <section className="py-20 md:py-28 px-6">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
@@ -11,7 +11,7 @@ const NewServiceSection = () => {
             New at Nas Beauty Paller: Clinical-strength metabolic peels! These treatments rev up cell turnover, even out tone,
             and leave you with that 'just came back from vacation' glow. Minimal downtime, maximum results.
           </p>
-          <a href="#" className="btn-beauty inline-block">Book Now</a>
+          <button onClick={onBookNow} className="btn-beauty inline-block">Book Now</button>
         </div>
         <div className="order-1 md:order-2">
           <img
