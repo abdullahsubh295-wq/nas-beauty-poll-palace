@@ -11,7 +11,7 @@ const NewServiceSection = ({ onBookNow }: { onBookNow?: () => void }) => {
             New at Nas Beauty Paller: Clinical-strength metabolic peels! These treatments rev up cell turnover, even out tone,
             and leave you with that 'just came back from vacation' glow. Minimal downtime, maximum results.
           </p>
-          <a href="#" className="btn-beauty inline-block">Book Now</a>
+          <button onClick={onBookNow} className="btn-beauty inline-block">Book Now</button>
         </div>
         <div className="order-1 md:order-2">
           <img

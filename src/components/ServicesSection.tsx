@@ -28,9 +28,9 @@ const ServicesSection = ({ onBookNow }: { onBookNow?: () => void }) => {
               <p className="text-muted-foreground font-body text-sm leading-relaxed">
                 {service.description}
               </p>
-              <a href="#" className="btn-beauty text-[10px] inline-block mt-2">
+              <button onClick={onBookNow} className="btn-beauty text-[10px] inline-block mt-2">
                 Book Now
-              </a>
+              </button>
             </div>
           ))}
         </div>
