@@ -13,7 +13,7 @@ const services = [
   },
 ];
 
-const ServicesSection = () => {
+const ServicesSection = ({ onBookNow }: { onBookNow?: () => void }) => {
   return (
     <section id="services" className="py-20 md:py-28 px-6 bg-secondary">
       <div className="max-w-6xl mx-auto">
