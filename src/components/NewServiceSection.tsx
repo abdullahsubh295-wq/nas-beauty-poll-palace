@@ -1,6 +1,6 @@
 import heroImage from "@/assets/hero-beauty.jpg";
 
-const NewServiceSection = () => {
+const NewServiceSection = ({ onBookNow }: { onBookNow?: () => void }) => {
   return (
     <section className="py-20 md:py-28 px-6">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
