@@ -1,9 +1,8 @@
-import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useState } from "react";
 import BookingDialog from "@/components/BookingDialog";
-import { Clock, DollarSign } from "lucide-react";
+import { Clock } from "lucide-react";
 
 const services = [
   {
