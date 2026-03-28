@@ -18,7 +18,7 @@ const questions: QuizQuestion[] = [
     id: 1,
     question: "What is your Main Skin Concern?",
     description:
-      "At Nas Beauty Paller, we meet you where you are. Pick your biggest skin concern — but don't overthink it!",
+      "At Naz Beauty Salon, we meet you where you are. Pick your biggest skin concern — but don't overthink it!",
     options: [
       "Breakouts / congestion",
       "Sensitivity / redness",
