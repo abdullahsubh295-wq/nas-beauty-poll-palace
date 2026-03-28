@@ -18,10 +18,6 @@ const navLinks: NavItem[] = [
     href: "#",
   },
   {
-    label: "GIFT CARDS",
-    href: "#shop",
-  },
-  {
     label: "SERVICE MENU",
     href: "/service-menu",
     dropdown: [
