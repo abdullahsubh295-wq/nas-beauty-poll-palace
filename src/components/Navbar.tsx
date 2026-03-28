@@ -139,7 +139,7 @@ const Navbar = ({ onBookNow }: NavbarProps) => {
           {/* Center logo */}
           <div className="absolute left-1/2 -translate-x-1/2 text-center">
             <Link to="/" className="font-display text-xl md:text-2xl tracking-wide text-foreground text-center mb-0">
-              NAZ BEAUTY <br />PARLOUR
+              NAZ BEAUTY <br />SALON
             </Link>
             <p className="hidden md:block text-[9px] tracking-[0.3em] uppercase text-muted-foreground mt-1.5 mb-1">
               Where Beauty Meets Self-Care

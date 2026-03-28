@@ -3,7 +3,7 @@ const Footer = () => {
     <footer className="bg-foreground text-primary-foreground py-16 px-6">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
         <div className="space-y-4">
-          <h3 className="font-display text-xl">nas beauty paller</h3>
+          <h3 className="font-display text-xl">naz beauty salon</h3>
           <p className="text-primary-foreground/70 text-sm font-body leading-relaxed">
             Clean skincare born in the parlor, designed for real life.
           </p>
@@ -38,7 +38,7 @@ const Footer = () => {
       </div>
       <div className="max-w-6xl mx-auto mt-12 pt-8 border-t border-primary-foreground/20 text-center">
         <p className="text-xs text-primary-foreground/50 font-body">
-          © 2026 Nas Beauty Paller. All rights reserved.
+          © 2026 Naz Beauty Salon. All rights reserved.
         </p>
       </div>
     </footer>

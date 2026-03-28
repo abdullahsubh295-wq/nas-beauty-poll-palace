@@ -79,7 +79,7 @@ const ServiceMenu = () => {
       <main className="pt-16 md:pt-20">
         {/* Hero */}
         <section className="py-20 md:py-28 bg-secondary text-center px-6">
-          <p className="section-subtitle mb-3">Nas Beauty Paller</p>
+          <p className="section-subtitle mb-3">Naz Beauty Salon</p>
           <h1 className="font-display text-4xl md:text-5xl font-normal mb-4">Service Menu</h1>
           <p className="text-muted-foreground font-body max-w-lg mx-auto">
             From signature facials to advanced treatments, every service is designed to help you glow from within.
