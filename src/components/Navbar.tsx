@@ -145,8 +145,8 @@ const Navbar = ({ onBookNow }: NavbarProps) => {
             <Link to="/" className="font-display text-xl md:text-2xl tracking-wide text-foreground text-center mb-0">
               NAZ BEAUTY <br />PARLOUR
             </Link>
-            <p className="hidden md:block text-[9px] tracking-[0.3em] uppercase text-muted-foreground mt-0.5">
-              A Space For You
+            <p className="hidden md:block text-[9px] tracking-[0.3em] uppercase text-muted-foreground mt-1.5 mb-1">
+              Where Beauty Meets Self-Care
             </p>
           </div>
 
