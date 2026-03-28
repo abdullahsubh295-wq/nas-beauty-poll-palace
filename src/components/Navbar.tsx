@@ -143,7 +143,6 @@ const Navbar = ({ onBookNow }: NavbarProps) => {
           {/* Center logo */}
           <div className="absolute left-1/2 -translate-x-1/2 text-center">
             <Link to="/" className="font-display text-xl md:text-2xl tracking-wide text-foreground">
-              nas beauty paller
             </Link>
             <p className="hidden md:block text-[9px] tracking-[0.3em] uppercase text-muted-foreground mt-0.5">
               A Space For You
