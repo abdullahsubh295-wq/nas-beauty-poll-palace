@@ -1,6 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import spaImage from "@/assets/spa-interior.jpg";
 
 const SkinQuizSection = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="py-20 md:py-28 px-6">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
@@ -10,9 +13,9 @@ const SkinQuizSection = () => {
           <p className="text-muted-foreground font-body leading-relaxed">
             Take our easy and quick Skin Check Quiz for calm, personalized treatment guidance — no pressure, no stress.
           </p>
-          <a href="#" className="btn-beauty inline-block">
+          <button onClick={() => navigate("/skin-quiz")} className="btn-beauty inline-block">
             Take the Skin Check Quiz
-          </a>
+          </button>
         </div>
         <div className="relative">
           <img
@@ -23,12 +26,12 @@ const SkinQuizSection = () => {
             width={1200}
             height={800}
           />
-          <a
-            href="#"
+          <button
+            onClick={() => navigate("/skin-quiz")}
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-6 py-2.5 text-xs tracking-[0.2em] uppercase font-medium bg-primary-foreground/90 text-foreground hover:bg-primary-foreground transition-all"
           >
             Take the Quiz
-          </a>
+          </button>
         </div>
       </div>
     </section>
