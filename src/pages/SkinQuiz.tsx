@@ -268,7 +268,7 @@ const SkinQuiz = () => {
               {/* Header */}
               <div className="flex items-center justify-between mb-6">
                 <p className="font-display text-lg md:text-xl tracking-wide text-foreground">
-                  nas beauty paller
+                  naz beauty salon
                 </p>
                 <p className="text-sm text-muted-foreground tracking-wide">
                   Question {currentQuestion}

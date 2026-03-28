@@ -5,10 +5,10 @@ const NewServiceSection = ({ onBookNow }: { onBookNow?: () => void }) => {
     <section className="py-20 md:py-28 px-6">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
         <div className="space-y-6 order-2 md:order-1">
-          <p className="section-subtitle">✨ New at Nas Beauty Paller</p>
+          <p className="section-subtitle">✨ New at Naz Beauty Salon</p>
           <h2 className="section-title">Introducing Chemical Peels</h2>
           <p className="text-muted-foreground font-body leading-relaxed">
-            New at Nas Beauty Paller: Clinical-strength metabolic peels! These treatments rev up cell turnover, even out tone,
+            New at Naz Beauty Salon: Clinical-strength metabolic peels! These treatments rev up cell turnover, even out tone,
             and leave you with that 'just came back from vacation' glow. Minimal downtime, maximum results.
           </p>
           <button onClick={onBookNow} className="btn-beauty inline-block">Book Now</button>

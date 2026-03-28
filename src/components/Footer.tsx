@@ -38,7 +38,7 @@ const Footer = () => {
       </div>
       <div className="max-w-6xl mx-auto mt-12 pt-8 border-t border-primary-foreground/20 text-center">
         <p className="text-xs text-primary-foreground/50 font-body">
-          © 2026 Nas Beauty Paller. All rights reserved.
+          © 2026 Naz Beauty Salon. All rights reserved.
         </p>
       </div>
     </footer>

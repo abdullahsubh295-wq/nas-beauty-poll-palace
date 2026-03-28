@@ -26,7 +26,7 @@ const LocationsSection = () => {
           <div className="relative group overflow-hidden">
             <img
               src={spaImage}
-              alt="Nas Beauty Paller Location 2"
+              alt="Naz Beauty Salon Location 2"
               className="w-full h-[350px] object-cover group-hover:scale-105 transition-transform duration-500"
               loading="lazy"
               width={1200}

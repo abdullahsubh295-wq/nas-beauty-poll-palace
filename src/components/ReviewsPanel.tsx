@@ -25,7 +25,7 @@ const reviews = [
     name: "Fatima R.",
     rating: 5,
     date: "3 weeks ago",
-    text: "I've tried so many parlours but Naz Beauty Parlour is on another level. The ambiance, the care, everything is top-notch.",
+    text: "I've tried so many salons but Naz Beauty Salon is on another level. The ambiance, the care, everything is top-notch.",
   },
   {
     name: "Hina T.",
