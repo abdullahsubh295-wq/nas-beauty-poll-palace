@@ -6,11 +6,11 @@ import ServicesSection from "@/components/ServicesSection";
 import ProductsSection from "@/components/ProductsSection";
 import NewServiceSection from "@/components/NewServiceSection";
 import FeaturedProductSection from "@/components/FeaturedProductSection";
-import BlogSection from "@/components/BlogSection";
 import TrustBadges from "@/components/TrustBadges";
 import LocationsSection from "@/components/LocationsSection";
 import Footer from "@/components/Footer";
 import BookingDialog from "@/components/BookingDialog";
+import ReviewsPanel from "@/components/ReviewsPanel";
 
 const Index = () => {
   const [bookingOpen, setBookingOpen] = useState(false);
@@ -26,11 +26,11 @@ const Index = () => {
         <NewServiceSection onBookNow={() => setBookingOpen(true)} />
         <FeaturedProductSection />
         <TrustBadges />
-        <BlogSection />
         <LocationsSection />
       </main>
       <Footer />
       <BookingDialog open={bookingOpen} onOpenChange={setBookingOpen} />
+      <ReviewsPanel />
     </div>
   );
 };
