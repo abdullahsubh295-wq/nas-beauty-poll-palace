@@ -32,6 +32,7 @@ const Index = () => {
       <Footer />
       <BookingDialog open={bookingOpen} onOpenChange={setBookingOpen} />
       <ReviewsPanel />
+      <MessageWidget />
     </div>
   );
 };
