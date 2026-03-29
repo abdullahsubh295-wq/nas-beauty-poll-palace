@@ -11,6 +11,7 @@ import LocationsSection from "@/components/LocationsSection";
 import Footer from "@/components/Footer";
 import BookingDialog from "@/components/BookingDialog";
 import ReviewsPanel from "@/components/ReviewsPanel";
+import MessageWidget from "@/components/MessageWidget";
 
 const Index = () => {
   const [bookingOpen, setBookingOpen] = useState(false);
@@ -31,6 +32,7 @@ const Index = () => {
       <Footer />
       <BookingDialog open={bookingOpen} onOpenChange={setBookingOpen} />
       <ReviewsPanel />
+      <MessageWidget />
     </div>
   );
 };
