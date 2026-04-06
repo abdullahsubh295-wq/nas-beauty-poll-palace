@@ -68,13 +68,32 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
     onOpenChange(val);
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     setConfirmed(true);
     toast({
       title: "Booking Confirmed! ✨",
       description: `Your ${treatments.find(t => t.id === selectedTreatment)?.name} is booked for ${selectedDate ? format(selectedDate, "PPP") : ""} at ${selectedTime}.`,
     });
-    window.open("https://hook.eu1.make.com/j2iwldzghka58zqix3bfxu5lolug7afl", "_blank");
+
+    try {
+      await fetch("https://hook.eu1.make.com/j2iwldzghka58zqix3bfxu5lolug7afl", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          treatment: treatmentData?.name,
+          duration: treatmentData?.duration,
+          price: treatmentData?.price,
+          date: selectedDate ? format(selectedDate, "yyyy-MM-dd") : "",
+          dateFormatted: selectedDate ? format(selectedDate, "EEEE, MMMM d, yyyy") : "",
+          time: selectedTime,
+        }),
+      });
+    } catch (error) {
+      console.error("Failed to send booking data:", error);
+    }
   };
 
   const treatmentData = treatments.find(t => t.id === selectedTreatment);
