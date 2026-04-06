@@ -54,6 +54,7 @@ const defaultReviews: Review[] = [
 ];
 
 const ReviewsPanel = () => {
+  const { isAdmin } = useAdmin();
   const [reviews, setReviews] = useState<Review[]>(defaultReviews);
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState("");
