@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Star, ChevronRight, Send } from "lucide-react";
+import { Star, ChevronRight, Send, Trash2 } from "lucide-react";
+import { useAdmin } from "@/contexts/AdminContext";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -53,6 +54,7 @@ const defaultReviews: Review[] = [
 ];
 
 const ReviewsPanel = () => {
+  const { isAdmin } = useAdmin();
   const [reviews, setReviews] = useState<Review[]>(defaultReviews);
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState("");
@@ -79,6 +81,11 @@ const ReviewsPanel = () => {
     setRating(0);
     setShowForm(false);
     toast({ title: "Thank you! Your review has been posted." });
+  };
+
+  const handleDelete = (index: number) => {
+    setReviews((prev) => prev.filter((_, i) => i !== index));
+    toast({ title: "Review deleted." });
   };
 
   return (
@@ -171,17 +178,28 @@ const ReviewsPanel = () => {
                     <p className="text-xs text-muted-foreground">{review.date}</p>
                   </div>
                 </div>
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`h-3.5 w-3.5 ${
-                        i < review.rating
-                          ? "fill-primary text-primary"
-                          : "text-muted"
-                      }`}
-                    />
-                  ))}
+                <div className="flex items-center gap-2">
+                  <div className="flex">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`h-3.5 w-3.5 ${
+                          i < review.rating
+                            ? "fill-primary text-primary"
+                            : "text-muted"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  {isAdmin && (
+                    <button
+                      onClick={() => handleDelete(index)}
+                      className="p-1 rounded hover:bg-destructive/10 transition-colors"
+                      title="Delete review"
+                    >
+                      <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                    </button>
+                  )}
                 </div>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed">
