@@ -1,8 +1,19 @@
 import { useState } from "react";
-import { Star, ChevronRight, X } from "lucide-react";
+import { Star, ChevronRight, Send } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/hooks/use-toast";
 
-const reviews = [
+interface Review {
+  name: string;
+  rating: number;
+  date: string;
+  text: string;
+}
+
+const defaultReviews: Review[] = [
   {
     name: "Ayesha K.",
     rating: 5,
@@ -42,6 +53,34 @@ const reviews = [
 ];
 
 const ReviewsPanel = () => {
+  const [reviews, setReviews] = useState<Review[]>(defaultReviews);
+  const [showForm, setShowForm] = useState(false);
+  const [name, setName] = useState("");
+  const [text, setText] = useState("");
+  const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+
+  const avgRating = (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1);
+
+  const handleSubmit = () => {
+    if (!name.trim() || !text.trim() || rating === 0) {
+      toast({ title: "Please fill in your name, review, and select a star rating.", variant: "destructive" });
+      return;
+    }
+    const newReview: Review = {
+      name: name.trim(),
+      rating,
+      date: "Just now",
+      text: text.trim(),
+    };
+    setReviews((prev) => [newReview, ...prev]);
+    setName("");
+    setText("");
+    setRating(0);
+    setShowForm(false);
+    toast({ title: "Thank you! Your review has been posted." });
+  };
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -58,15 +97,64 @@ const ReviewsPanel = () => {
           <SheetTitle className="font-display text-2xl tracking-wide">
             Client Reviews
           </SheetTitle>
-          <div className="flex items-center gap-2 mt-1">
-            <div className="flex">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-4 w-4 fill-primary text-primary" />
-              ))}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="h-4 w-4 fill-primary text-primary" />
+                ))}
+              </div>
+              <span className="text-sm text-muted-foreground">{avgRating} out of 5 · {reviews.length} reviews</span>
             </div>
-            <span className="text-sm text-muted-foreground">4.9 out of 5 · {reviews.length} reviews</span>
+            <Button size="sm" onClick={() => setShowForm(!showForm)} variant={showForm ? "outline" : "default"}>
+              {showForm ? "Cancel" : "Write Review"}
+            </Button>
           </div>
         </SheetHeader>
+
+        {showForm && (
+          <div className="p-6 border-b border-border bg-accent/30 space-y-4">
+            <h3 className="font-medium text-sm text-foreground">Share your experience</h3>
+            <div className="flex items-center gap-1">
+              <span className="text-sm text-muted-foreground mr-2">Rating:</span>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={() => setRating(star)}
+                  onMouseEnter={() => setHoverRating(star)}
+                  onMouseLeave={() => setHoverRating(0)}
+                  className="p-0.5 transition-transform hover:scale-110"
+                >
+                  <Star
+                    className={`h-6 w-6 transition-colors ${
+                      star <= (hoverRating || rating)
+                        ? "fill-primary text-primary"
+                        : "text-muted-foreground"
+                    }`}
+                  />
+                </button>
+              ))}
+            </div>
+            <Input
+              placeholder="Your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              maxLength={50}
+            />
+            <Textarea
+              placeholder="Write your review..."
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              maxLength={500}
+              rows={3}
+            />
+            <Button onClick={handleSubmit} className="w-full gap-2">
+              <Send className="h-4 w-4" />
+              Submit Review
+            </Button>
+          </div>
+        )}
 
         <div className="divide-y divide-border">
           {reviews.map((review, index) => (
