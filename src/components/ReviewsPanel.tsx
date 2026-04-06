@@ -178,17 +178,28 @@ const ReviewsPanel = () => {
                     <p className="text-xs text-muted-foreground">{review.date}</p>
                   </div>
                 </div>
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`h-3.5 w-3.5 ${
-                        i < review.rating
-                          ? "fill-primary text-primary"
-                          : "text-muted"
-                      }`}
-                    />
-                  ))}
+                <div className="flex items-center gap-2">
+                  <div className="flex">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`h-3.5 w-3.5 ${
+                          i < review.rating
+                            ? "fill-primary text-primary"
+                            : "text-muted"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  {isAdmin && (
+                    <button
+                      onClick={() => handleDelete(index)}
+                      className="p-1 rounded hover:bg-destructive/10 transition-colors"
+                      title="Delete review"
+                    >
+                      <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                    </button>
+                  )}
                 </div>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed">
