@@ -74,6 +74,7 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
       title: "Booking Confirmed! ✨",
       description: `Your ${treatments.find(t => t.id === selectedTreatment)?.name} is booked for ${selectedDate ? format(selectedDate, "PPP") : ""} at ${selectedTime}.`,
     });
+    window.open("https://hook.eu1.make.com/j2iwldzghka58zqix3bfxu5lolug7afl", "_blank");
   };
 
   const treatmentData = treatments.find(t => t.id === selectedTreatment);
