@@ -83,6 +83,11 @@ const ReviewsPanel = () => {
     toast({ title: "Thank you! Your review has been posted." });
   };
 
+  const handleDelete = (index: number) => {
+    setReviews((prev) => prev.filter((_, i) => i !== index));
+    toast({ title: "Review deleted." });
+  };
+
   return (
     <Sheet>
       <SheetTrigger asChild>
