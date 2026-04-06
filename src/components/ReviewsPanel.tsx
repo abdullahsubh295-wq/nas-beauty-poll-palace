@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Star, ChevronRight, Send } from "lucide-react";
+import { Star, ChevronRight, Send, Trash2 } from "lucide-react";
+import { useAdmin } from "@/contexts/AdminContext";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
