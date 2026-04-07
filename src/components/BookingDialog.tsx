@@ -147,6 +147,16 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
             >
               Done
             </Button>
+            <a
+              href={`https://wa.me/923140584441?text=${encodeURIComponent(
+                `New Booking\nName: ${name}\nPhone: ${phone}\nServices: ${selectedTreatmentData.map(t => t.name).join(", ")}\nDate: ${selectedDate ? format(selectedDate, "EEEE, MMMM d, yyyy") : ""}\nTime: ${selectedTime}\nPrice: $${totalPrice}\nE-mail: ${email}`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 text-sm font-body tracking-[0.1em] uppercase border border-green-600 text-green-600 hover:bg-green-600 hover:text-white transition-colors px-6 py-2"
+            >
+              Confirm on WhatsApp
+            </a>
           </div>
         ) : (
           <>
