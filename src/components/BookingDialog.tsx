@@ -17,15 +17,16 @@ import {
 } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 
 const treatments = [
-  { id: "smooth-operator", name: "Smooth Operator", duration: "60 min", price: "$120" },
-  { id: "dermaplaning", name: "Dermaplaning", duration: "45 min", price: "$95" },
-  { id: "the-undecided", name: "The Undecided", duration: "60 min", price: "$110" },
-  { id: "chemical-peel", name: "Chemical Peel", duration: "45 min", price: "$150" },
-  { id: "hydrafacial", name: "HydraGlow Facial", duration: "75 min", price: "$175" },
-  { id: "brow-lamination", name: "Brow Lamination", duration: "30 min", price: "$65" },
+  { id: "smooth-operator", name: "Smooth Operator", duration: "60 min", price: 120 },
+  { id: "dermaplaning", name: "Dermaplaning", duration: "45 min", price: 95 },
+  { id: "the-undecided", name: "The Undecided", duration: "60 min", price: 110 },
+  { id: "chemical-peel", name: "Chemical Peel", duration: "45 min", price: 150 },
+  { id: "hydrafacial", name: "HydraGlow Facial", duration: "75 min", price: 175 },
+  { id: "brow-lamination", name: "Brow Lamination", duration: "30 min", price: 65 },
 ];
 
 const timeSlots = [
@@ -44,7 +45,7 @@ interface BookingDialogProps {
 const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
   const { toast } = useToast();
   const [step, setStep] = useState(1);
-  const [selectedTreatment, setSelectedTreatment] = useState<string | null>(null);
+  const [selectedTreatments, setSelectedTreatments] = useState<string[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [name, setName] = useState("");
@@ -54,7 +55,7 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
 
   const resetForm = () => {
     setStep(1);
-    setSelectedTreatment(null);
+    setSelectedTreatments([]);
     setSelectedDate(undefined);
     setSelectedTime(null);
     setName("");
@@ -68,11 +69,22 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
     onOpenChange(val);
   };
 
+  const toggleTreatment = (id: string) => {
+    setSelectedTreatments(prev =>
+      prev.includes(id) ? prev.filter(t => t !== id) : [...prev, id]
+    );
+  };
+
+  const selectedTreatmentData = treatments.filter(t => selectedTreatments.includes(t.id));
+  const totalPrice = selectedTreatmentData.reduce((sum, t) => sum + t.price, 0);
+  const totalDuration = selectedTreatmentData.reduce((sum, t) => sum + parseInt(t.duration), 0);
+
   const handleConfirm = async () => {
     setConfirmed(true);
+    const treatmentNames = selectedTreatmentData.map(t => t.name).join(", ");
     toast({
       title: "Booking Confirmed! ✨",
-      description: `Your ${treatments.find(t => t.id === selectedTreatment)?.name} is booked for ${selectedDate ? format(selectedDate, "PPP") : ""} at ${selectedTime}.`,
+      description: `Your ${treatmentNames} booking is confirmed for ${selectedDate ? format(selectedDate, "PPP") : ""} at ${selectedTime}.`,
     });
 
     try {
@@ -83,9 +95,10 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
           name,
           email,
           phone,
-          treatment: treatmentData?.name,
-          duration: treatmentData?.duration,
-          price: treatmentData?.price,
+          treatments: selectedTreatmentData.map(t => t.name).join(", "),
+          durations: selectedTreatmentData.map(t => t.duration).join(", "),
+          totalPrice: `$${totalPrice}`,
+          totalDuration: `${totalDuration} min`,
           date: selectedDate ? format(selectedDate, "yyyy-MM-dd") : "",
           dateFormatted: selectedDate ? format(selectedDate, "EEEE, MMMM d, yyyy") : "",
           time: selectedTime,
@@ -95,8 +108,6 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
       console.error("Failed to send booking data:", error);
     }
   };
-
-  const treatmentData = treatments.find(t => t.id === selectedTreatment);
 
   // Simulate some booked slots
   const bookedSlots = ["10:00 AM", "1:00 PM", "3:30 PM"];
@@ -115,12 +126,17 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
           <div className="text-center py-8 space-y-6">
             <CheckCircle2 size={64} className="mx-auto text-gold" />
             <div className="space-y-2">
-              <p className="font-display text-xl">{treatmentData?.name}</p>
+              {selectedTreatmentData.map(t => (
+                <p key={t.id} className="font-display text-lg">{t.name} — ${t.price}</p>
+              ))}
               <p className="text-muted-foreground font-body">
                 {selectedDate ? format(selectedDate, "EEEE, MMMM d, yyyy") : ""}
               </p>
               <p className="text-muted-foreground font-body">at {selectedTime}</p>
-              <p className="font-display text-lg mt-4">{treatmentData?.price}</p>
+              <div className="border-t border-border pt-3 mt-3">
+                <p className="font-display text-xl">Total: ${totalPrice}</p>
+                <p className="text-xs text-muted-foreground font-body">{totalDuration} min total</p>
+              </div>
             </div>
             <div className="bg-secondary p-4 rounded text-sm text-muted-foreground font-body">
               <p>A confirmation has been sent to <strong className="text-foreground">{email}</strong></p>
@@ -149,33 +165,45 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
               ))}
             </div>
 
-            {/* Step 1: Select treatment */}
+            {/* Step 1: Select treatments */}
             {step === 1 && (
               <div className="space-y-4">
-                <p className="section-subtitle text-center">Select Your Treatment</p>
+                <p className="section-subtitle text-center">Select Your Treatments</p>
+                <p className="text-xs text-muted-foreground font-body text-center">You can select multiple services</p>
                 <div className="grid gap-3 mt-4">
                   {treatments.map(t => (
                     <button
                       key={t.id}
-                      onClick={() => setSelectedTreatment(t.id)}
+                      onClick={() => toggleTreatment(t.id)}
                       className={cn(
-                        "flex items-center justify-between p-4 border transition-all text-left",
-                        selectedTreatment === t.id
+                        "flex items-center gap-3 p-4 border transition-all text-left",
+                        selectedTreatments.includes(t.id)
                           ? "border-foreground bg-foreground/5"
                           : "border-border hover:border-foreground/50"
                       )}
                     >
-                      <div>
+                      <Checkbox
+                        checked={selectedTreatments.includes(t.id)}
+                        onCheckedChange={() => toggleTreatment(t.id)}
+                        className="pointer-events-none"
+                      />
+                      <div className="flex-1">
                         <p className="font-display text-sm">{t.name}</p>
                         <p className="text-xs text-muted-foreground font-body mt-1">{t.duration}</p>
                       </div>
-                      <span className="font-display text-sm">{t.price}</span>
+                      <span className="font-display text-sm">${t.price}</span>
                     </button>
                   ))}
                 </div>
+                {selectedTreatments.length > 0 && (
+                  <div className="bg-secondary p-3 flex items-center justify-between text-sm font-body">
+                    <span>{selectedTreatments.length} service{selectedTreatments.length > 1 ? "s" : ""} selected • {totalDuration} min</span>
+                    <span className="font-display text-base">Total: ${totalPrice}</span>
+                  </div>
+                )}
                 <Button
                   onClick={() => setStep(2)}
-                  disabled={!selectedTreatment}
+                  disabled={selectedTreatments.length === 0}
                   className="w-full btn-beauty-filled border-0 rounded-none mt-4"
                 >
                   Continue
@@ -188,7 +216,6 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
               <div className="space-y-6">
                 <p className="section-subtitle text-center">Choose Date & Time</p>
 
-                {/* Date picker */}
                 <div className="space-y-2">
                   <Label className="font-body text-xs tracking-[0.1em] uppercase">Select Date</Label>
                   <Popover>
@@ -217,7 +244,6 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
                   </Popover>
                 </div>
 
-                {/* Time slots */}
                 {selectedDate && (
                   <div className="space-y-2">
                     <Label className="font-body text-xs tracking-[0.1em] uppercase flex items-center gap-1">
@@ -272,8 +298,16 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
                 <p className="section-subtitle text-center">Your Details</p>
 
                 {/* Summary */}
-                <div className="bg-secondary p-4 space-y-1 text-sm font-body">
-                  <p><strong className="font-display">{treatmentData?.name}</strong> — {treatmentData?.price}</p>
+                <div className="bg-secondary p-4 space-y-2 text-sm font-body">
+                  {selectedTreatmentData.map(t => (
+                    <p key={t.id}>
+                      <strong className="font-display">{t.name}</strong> — ${t.price}
+                    </p>
+                  ))}
+                  <div className="border-t border-border pt-2 mt-2 flex justify-between items-center">
+                    <span className="text-muted-foreground">{totalDuration} min total</span>
+                    <span className="font-display text-base">Total: ${totalPrice}</span>
+                  </div>
                   <p className="text-muted-foreground">
                     {selectedDate ? format(selectedDate, "EEEE, MMMM d, yyyy") : ""} at {selectedTime}
                   </p>
