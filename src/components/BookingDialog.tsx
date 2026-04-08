@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { format } from "date-fns";
+import { useState, useEffect } from "react";
+import { format, addDays, startOfDay } from "date-fns";
 import { CalendarIcon, Clock, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const treatments = [
   { id: "smooth-operator", name: "Smooth Operator", duration: "60 min", price: 120 },
@@ -29,7 +30,7 @@ const treatments = [
   { id: "brow-lamination", name: "Brow Lamination", duration: "30 min", price: 65 },
 ];
 
-const timeSlots = [
+const allTimeSlots = [
   "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM",
   "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM",
   "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM",
@@ -52,6 +53,55 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [confirmed, setConfirmed] = useState(false);
+  const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+
+  const today = startOfDay(new Date());
+  const maxDate = addDays(today, 6); // 7-day window
+
+  // Fetch booked slots for the selected date
+  useEffect(() => {
+    if (!selectedDate) return;
+
+    const dateStr = format(selectedDate, "yyyy-MM-dd");
+
+    const fetchBookedSlots = async () => {
+      const { data } = await supabase
+        .from("bookings")
+        .select("booking_time")
+        .eq("booking_date", dateStr);
+      setBookedSlots(data?.map(b => b.booking_time) || []);
+    };
+
+    fetchBookedSlots();
+
+    // Realtime subscription for instant updates
+    const channel = supabase
+      .channel(`bookings-${dateStr}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "bookings",
+          filter: `booking_date=eq.${dateStr}`,
+        },
+        (payload) => {
+          setBookedSlots(prev => [...prev, (payload.new as any).booking_time]);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [selectedDate]);
+
+  // Reset selected time if it becomes booked
+  useEffect(() => {
+    if (selectedTime && bookedSlots.includes(selectedTime)) {
+      setSelectedTime(null);
+    }
+  }, [bookedSlots, selectedTime]);
 
   const resetForm = () => {
     setStep(1);
@@ -62,6 +112,7 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
     setEmail("");
     setPhone("");
     setConfirmed(false);
+    setBookedSlots([]);
   };
 
   const handleClose = (val: boolean) => {
@@ -79,14 +130,35 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
   const totalPrice = selectedTreatmentData.reduce((sum, t) => sum + t.price, 0);
   const totalDuration = selectedTreatmentData.reduce((sum, t) => sum + parseInt(t.duration), 0);
 
+  const availableSlots = allTimeSlots.filter(t => !bookedSlots.includes(t));
+
   const handleConfirm = async () => {
-    setConfirmed(true);
     const treatmentNames = selectedTreatmentData.map(t => t.name).join(", ");
+
+    // Save to database first
+    const { error } = await supabase.from("bookings").insert({
+      name,
+      email,
+      phone,
+      treatments: treatmentNames,
+      booking_date: selectedDate ? format(selectedDate, "yyyy-MM-dd") : "",
+      booking_time: selectedTime || "",
+      total_price: totalPrice,
+      total_duration: totalDuration,
+    });
+
+    if (error) {
+      toast({ title: "Booking failed", description: "Please try again.", variant: "destructive" });
+      return;
+    }
+
+    setConfirmed(true);
     toast({
       title: "Booking Confirmed! ✨",
       description: `Your ${treatmentNames} booking is confirmed for ${selectedDate ? format(selectedDate, "PPP") : ""} at ${selectedTime}.`,
     });
 
+    // Send to Make webhook
     try {
       await fetch("https://hook.eu1.make.com/j2iwldzghka58zqix3bfxu5lolug7afl", {
         method: "POST",
@@ -95,7 +167,7 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
           name,
           email,
           phone,
-          treatments: selectedTreatmentData.map(t => t.name).join(", "),
+          treatments: treatmentNames,
           durations: selectedTreatmentData.map(t => t.duration).join(", "),
           totalPrice: `$${totalPrice}`,
           totalDuration: `${totalDuration} min`,
@@ -104,14 +176,10 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
           time: selectedTime,
         }),
       });
-    } catch (error) {
-      console.error("Failed to send booking data:", error);
+    } catch (err) {
+      console.error("Failed to send booking data:", err);
     }
   };
-
-  // Simulate some booked slots
-  const bookedSlots = ["10:00 AM", "1:00 PM", "3:30 PM"];
-  const availableSlots = timeSlots.filter(t => !bookedSlots.includes(t));
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -141,10 +209,7 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
             <div className="bg-secondary p-4 rounded text-sm text-muted-foreground font-body">
               <p>A confirmation has been sent to <strong className="text-foreground">{email}</strong></p>
             </div>
-            <Button
-              onClick={() => handleClose(false)}
-              className="btn-beauty-filled border-0 rounded-none"
-            >
+            <Button onClick={() => handleClose(false)} className="btn-beauty-filled border-0 rounded-none">
               Done
             </Button>
           </div>
@@ -217,7 +282,7 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
                 <p className="section-subtitle text-center">Choose Date & Time</p>
 
                 <div className="space-y-2">
-                  <Label className="font-body text-xs tracking-[0.1em] uppercase">Select Date</Label>
+                  <Label className="font-body text-xs tracking-[0.1em] uppercase">Select Date (next 7 days)</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -236,7 +301,10 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
                         mode="single"
                         selected={selectedDate}
                         onSelect={setSelectedDate}
-                        disabled={(date) => date < new Date() || date.getDay() === 0}
+                        disabled={(date) => {
+                          const d = startOfDay(date);
+                          return d < today || d > maxDate || date.getDay() === 0;
+                        }}
                         initialFocus
                         className={cn("p-3 pointer-events-auto")}
                       />
@@ -249,23 +317,29 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
                     <Label className="font-body text-xs tracking-[0.1em] uppercase flex items-center gap-1">
                       <Clock size={14} /> Available Time Slots
                     </Label>
-                    <div className="grid grid-cols-3 gap-2">
-                      {availableSlots.map(time => (
-                        <button
-                          key={time}
-                          onClick={() => setSelectedTime(time)}
-                          className={cn(
-                            "py-2 px-3 text-xs font-body border transition-all",
-                            selectedTime === time
-                              ? "border-foreground bg-foreground text-background"
-                              : "border-border hover:border-foreground/50"
-                          )}
-                        >
-                          {time}
-                        </button>
-                      ))}
-                    </div>
-                    {bookedSlots.length > 0 && (
+                    {availableSlots.length > 0 ? (
+                      <div className="grid grid-cols-3 gap-2">
+                        {availableSlots.map(time => (
+                          <button
+                            key={time}
+                            onClick={() => setSelectedTime(time)}
+                            className={cn(
+                              "py-2 px-3 text-xs font-body border transition-all",
+                              selectedTime === time
+                                ? "border-foreground bg-foreground text-background"
+                                : "border-border hover:border-foreground/50"
+                            )}
+                          >
+                            {time}
+                          </button>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-muted-foreground font-body text-center py-4">
+                        All slots are booked for this date. Please select another date.
+                      </p>
+                    )}
+                    {bookedSlots.length > 0 && availableSlots.length > 0 && (
                       <p className="text-[10px] text-muted-foreground font-body">
                         Some slots are already booked and not shown.
                       </p>
@@ -297,7 +371,6 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
               <div className="space-y-5">
                 <p className="section-subtitle text-center">Your Details</p>
 
-                {/* Summary */}
                 <div className="bg-secondary p-4 space-y-2 text-sm font-body">
                   {selectedTreatmentData.map(t => (
                     <p key={t.id}>
@@ -316,32 +389,15 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
                 <div className="space-y-4">
                   <div className="space-y-1.5">
                     <Label className="font-body text-xs tracking-[0.1em] uppercase">Full Name</Label>
-                    <Input
-                      value={name}
-                      onChange={e => setName(e.target.value)}
-                      placeholder="Your full name"
-                      className="rounded-none border-border font-body"
-                    />
+                    <Input value={name} onChange={e => setName(e.target.value)} placeholder="Your full name" className="rounded-none border-border font-body" />
                   </div>
                   <div className="space-y-1.5">
                     <Label className="font-body text-xs tracking-[0.1em] uppercase">Email</Label>
-                    <Input
-                      type="email"
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
-                      placeholder="your@email.com"
-                      className="rounded-none border-border font-body"
-                    />
+                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="your@email.com" className="rounded-none border-border font-body" />
                   </div>
                   <div className="space-y-1.5">
                     <Label className="font-body text-xs tracking-[0.1em] uppercase">Phone</Label>
-                    <Input
-                      type="tel"
-                      value={phone}
-                      onChange={e => setPhone(e.target.value)}
-                      placeholder="(555) 123-4567"
-                      className="rounded-none border-border font-body"
-                    />
+                    <Input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="(555) 123-4567" className="rounded-none border-border font-body" />
                   </div>
                 </div>
 
