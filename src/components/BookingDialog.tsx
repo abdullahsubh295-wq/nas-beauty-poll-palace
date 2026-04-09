@@ -132,10 +132,9 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
 
   const availableSlots = allTimeSlots.filter(t => !bookedSlots.includes(t));
 
-  const handleConfirm = async () => {
+  const saveBooking = async (): Promise<boolean> => {
     const treatmentNames = selectedTreatmentData.map(t => t.name).join(", ");
 
-    // Save to database first
     const { error } = await supabase.from("bookings").insert({
       name,
       email,
@@ -149,7 +148,7 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
 
     if (error) {
       toast({ title: "Booking failed", description: "Please try again.", variant: "destructive" });
-      return;
+      return false;
     }
 
     setConfirmed(true);
@@ -158,7 +157,6 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
       description: `Your ${treatmentNames} booking is confirmed for ${selectedDate ? format(selectedDate, "PPP") : ""} at ${selectedTime}.`,
     });
 
-    // Send to Make webhook
     try {
       await fetch("https://hook.eu1.make.com/j2iwldzghka58zqix3bfxu5lolug7afl", {
         method: "POST",
@@ -179,6 +177,23 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
     } catch (err) {
       console.error("Failed to send booking data:", err);
     }
+
+    return true;
+  };
+
+  const handleConfirm = async () => {
+    await saveBooking();
+  };
+
+  const handleConfirmWhatsApp = async () => {
+    const success = await saveBooking();
+    if (!success) return;
+
+    const treatmentNames = selectedTreatmentData.map(t => t.name).join(", ");
+    const dateStr = selectedDate ? format(selectedDate, "EEEE, MMMM d, yyyy") : "";
+    const message = `Hi! I'd like to confirm my booking:\n\n*Treatments:* ${treatmentNames}\n*Date:* ${dateStr}\n*Time:* ${selectedTime}\n*Total:* $${totalPrice} (${totalDuration} min)\n\n*Name:* ${name}\n*Email:* ${email}\n*Phone:* ${phone}`;
+    const encoded = encodeURIComponent(message);
+    window.open(`https://wa.me/?text=${encoded}`, "_blank");
   };
 
   return (
@@ -401,20 +416,29 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
                   </div>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex flex-col gap-3">
+                  <div className="flex gap-3">
+                    <Button
+                      variant="outline"
+                      onClick={() => setStep(2)}
+                      className="flex-1 rounded-none border-foreground font-body text-xs tracking-[0.1em] uppercase"
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      onClick={handleConfirm}
+                      disabled={!name || !email || !phone}
+                      className="flex-1 btn-beauty-filled border-0 rounded-none"
+                    >
+                      Confirm Booking
+                    </Button>
+                  </div>
                   <Button
-                    variant="outline"
-                    onClick={() => setStep(2)}
-                    className="flex-1 rounded-none border-foreground font-body text-xs tracking-[0.1em] uppercase"
-                  >
-                    Back
-                  </Button>
-                  <Button
-                    onClick={handleConfirm}
+                    onClick={handleConfirmWhatsApp}
                     disabled={!name || !email || !phone}
-                    className="flex-1 btn-beauty-filled border-0 rounded-none"
+                    className="w-full rounded-none bg-[#25D366] hover:bg-[#1da851] text-white font-body text-xs tracking-[0.1em] uppercase"
                   >
-                    Confirm Booking
+                    Confirm on WhatsApp
                   </Button>
                 </div>
               </div>
