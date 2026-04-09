@@ -151,12 +151,6 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
       return false;
     }
 
-    setConfirmed(true);
-    toast({
-      title: "Booking Confirmed! ✨",
-      description: `Your ${treatmentNames} booking is confirmed for ${selectedDate ? format(selectedDate, "PPP") : ""} at ${selectedTime}.`,
-    });
-
     try {
       await fetch("https://hook.eu1.make.com/j2iwldzghka58zqix3bfxu5lolug7afl", {
         method: "POST",
@@ -182,18 +176,26 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
   };
 
   const handleConfirm = async () => {
-    await saveBooking();
+    const success = await saveBooking();
+    if (success) {
+      toast({
+        title: "Booking Saved ✨",
+        description: "Your booking has been saved. Please confirm on WhatsApp to complete.",
+      });
+    }
   };
 
   const handleConfirmWhatsApp = async () => {
     const success = await saveBooking();
     if (!success) return;
 
+    setConfirmed(true);
+
     const treatmentNames = selectedTreatmentData.map(t => t.name).join(", ");
     const dateStr = selectedDate ? format(selectedDate, "EEEE, MMMM d, yyyy") : "";
-    const message = `Hi! I'd like to confirm my booking:\n\n*Treatments:* ${treatmentNames}\n*Date:* ${dateStr}\n*Time:* ${selectedTime}\n*Total:* $${totalPrice} (${totalDuration} min)\n\n*Name:* ${name}\n*Email:* ${email}\n*Phone:* ${phone}`;
+    const message = `New Appointment Booking\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nService: ${treatmentNames}\nTotal Price: $${totalPrice}\nDate: ${dateStr}\nTime: ${selectedTime}`;
     const encoded = encodeURIComponent(message);
-    window.open(`https://wa.me/?text=${encoded}`, "_blank");
+    window.open(`https://wa.me/923041159980?text=${encoded}`, "_blank");
   };
 
   return (
