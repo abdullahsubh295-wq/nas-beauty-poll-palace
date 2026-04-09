@@ -132,6 +132,19 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
 
   const availableSlots = allTimeSlots.filter(t => !bookedSlots.includes(t));
 
+  const handleConfirmWhatsApp = async () => {
+    await handleConfirm();
+    if (!confirmed) return; // will be set by handleConfirm
+  };
+
+  const openWhatsApp = () => {
+    const treatmentNames = selectedTreatmentData.map(t => t.name).join(", ");
+    const dateStr = selectedDate ? format(selectedDate, "EEEE, MMMM d, yyyy") : "";
+    const message = `Hi! I'd like to confirm my booking:\n\n*Treatments:* ${treatmentNames}\n*Date:* ${dateStr}\n*Time:* ${selectedTime}\n*Total:* $${totalPrice} (${totalDuration} min)\n\n*Name:* ${name}\n*Email:* ${email}\n*Phone:* ${phone}`;
+    const encoded = encodeURIComponent(message);
+    window.open(`https://wa.me/?text=${encoded}`, "_blank");
+  };
+
   const handleConfirm = async () => {
     const treatmentNames = selectedTreatmentData.map(t => t.name).join(", ");
 
