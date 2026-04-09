@@ -151,12 +151,6 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
       return false;
     }
 
-    setConfirmed(true);
-    toast({
-      title: "Booking Confirmed! ✨",
-      description: `Your ${treatmentNames} booking is confirmed for ${selectedDate ? format(selectedDate, "PPP") : ""} at ${selectedTime}.`,
-    });
-
     try {
       await fetch("https://hook.eu1.make.com/j2iwldzghka58zqix3bfxu5lolug7afl", {
         method: "POST",
