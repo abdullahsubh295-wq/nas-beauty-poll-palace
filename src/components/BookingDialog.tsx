@@ -132,23 +132,9 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
 
   const availableSlots = allTimeSlots.filter(t => !bookedSlots.includes(t));
 
-  const handleConfirmWhatsApp = async () => {
-    await handleConfirm();
-    if (!confirmed) return; // will be set by handleConfirm
-  };
-
-  const openWhatsApp = () => {
-    const treatmentNames = selectedTreatmentData.map(t => t.name).join(", ");
-    const dateStr = selectedDate ? format(selectedDate, "EEEE, MMMM d, yyyy") : "";
-    const message = `Hi! I'd like to confirm my booking:\n\n*Treatments:* ${treatmentNames}\n*Date:* ${dateStr}\n*Time:* ${selectedTime}\n*Total:* $${totalPrice} (${totalDuration} min)\n\n*Name:* ${name}\n*Email:* ${email}\n*Phone:* ${phone}`;
-    const encoded = encodeURIComponent(message);
-    window.open(`https://wa.me/?text=${encoded}`, "_blank");
-  };
-
-  const handleConfirm = async () => {
+  const saveBooking = async (): Promise<boolean> => {
     const treatmentNames = selectedTreatmentData.map(t => t.name).join(", ");
 
-    // Save to database first
     const { error } = await supabase.from("bookings").insert({
       name,
       email,
@@ -162,7 +148,7 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
 
     if (error) {
       toast({ title: "Booking failed", description: "Please try again.", variant: "destructive" });
-      return;
+      return false;
     }
 
     setConfirmed(true);
@@ -171,7 +157,6 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
       description: `Your ${treatmentNames} booking is confirmed for ${selectedDate ? format(selectedDate, "PPP") : ""} at ${selectedTime}.`,
     });
 
-    // Send to Make webhook
     try {
       await fetch("https://hook.eu1.make.com/j2iwldzghka58zqix3bfxu5lolug7afl", {
         method: "POST",
@@ -192,6 +177,23 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
     } catch (err) {
       console.error("Failed to send booking data:", err);
     }
+
+    return true;
+  };
+
+  const handleConfirm = async () => {
+    await saveBooking();
+  };
+
+  const handleConfirmWhatsApp = async () => {
+    const success = await saveBooking();
+    if (!success) return;
+
+    const treatmentNames = selectedTreatmentData.map(t => t.name).join(", ");
+    const dateStr = selectedDate ? format(selectedDate, "EEEE, MMMM d, yyyy") : "";
+    const message = `Hi! I'd like to confirm my booking:\n\n*Treatments:* ${treatmentNames}\n*Date:* ${dateStr}\n*Time:* ${selectedTime}\n*Total:* $${totalPrice} (${totalDuration} min)\n\n*Name:* ${name}\n*Email:* ${email}\n*Phone:* ${phone}`;
+    const encoded = encodeURIComponent(message);
+    window.open(`https://wa.me/?text=${encoded}`, "_blank");
   };
 
   return (
