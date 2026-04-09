@@ -401,20 +401,29 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
                   </div>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex flex-col gap-3">
+                  <div className="flex gap-3">
+                    <Button
+                      variant="outline"
+                      onClick={() => setStep(2)}
+                      className="flex-1 rounded-none border-foreground font-body text-xs tracking-[0.1em] uppercase"
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      onClick={handleConfirm}
+                      disabled={!name || !email || !phone}
+                      className="flex-1 btn-beauty-filled border-0 rounded-none"
+                    >
+                      Confirm Booking
+                    </Button>
+                  </div>
                   <Button
-                    variant="outline"
-                    onClick={() => setStep(2)}
-                    className="flex-1 rounded-none border-foreground font-body text-xs tracking-[0.1em] uppercase"
-                  >
-                    Back
-                  </Button>
-                  <Button
-                    onClick={handleConfirm}
+                    onClick={handleConfirmWhatsApp}
                     disabled={!name || !email || !phone}
-                    className="flex-1 btn-beauty-filled border-0 rounded-none"
+                    className="w-full rounded-none bg-[#25D366] hover:bg-[#1da851] text-white font-body text-xs tracking-[0.1em] uppercase"
                   >
-                    Confirm Booking
+                    Confirm on WhatsApp
                   </Button>
                 </div>
               </div>
