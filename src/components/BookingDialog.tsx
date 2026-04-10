@@ -177,25 +177,15 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
 
   const handleConfirm = async () => {
     const success = await saveBooking();
-    if (success) {
-      toast({
-        title: "Booking Saved ✨",
-        description: "Your booking has been saved. Please confirm on WhatsApp to complete.",
-      });
-    }
-  };
-
-  const handleConfirmWhatsApp = async () => {
-    const success = await saveBooking();
     if (!success) return;
 
     setConfirmed(true);
 
     const treatmentNames = selectedTreatmentData.map(t => t.name).join(", ");
     const dateStr = selectedDate ? format(selectedDate, "EEEE, MMMM d, yyyy") : "";
-    const message = `New Appointment Booking\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nService: ${treatmentNames}\nTotal Price: $${totalPrice}\nDate: ${dateStr}\nTime: ${selectedTime}`;
+    const message = `New Booking Request\n\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nService: ${treatmentNames}\nDate: ${dateStr}\nTime: ${selectedTime}\nTotal Price: $${totalPrice}`;
     const encoded = encodeURIComponent(message);
-    window.open(`https://wa.me/923041159980?text=${encoded}`, "_blank");
+    window.open(`https://wa.me/923140584441?text=${encoded}`, "_blank");
   };
 
   return (
@@ -418,29 +408,20 @@ const BookingDialog = ({ open, onOpenChange }: BookingDialogProps) => {
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-3">
-                  <div className="flex gap-3">
-                    <Button
-                      variant="outline"
-                      onClick={() => setStep(2)}
-                      className="flex-1 rounded-none border-foreground font-body text-xs tracking-[0.1em] uppercase"
-                    >
-                      Back
-                    </Button>
-                    <Button
-                      onClick={handleConfirm}
-                      disabled={!name || !email || !phone}
-                      className="flex-1 btn-beauty-filled border-0 rounded-none"
-                    >
-                      Confirm Booking
-                    </Button>
-                  </div>
+                <div className="flex gap-3">
                   <Button
-                    onClick={handleConfirmWhatsApp}
-                    disabled={!name || !email || !phone}
-                    className="w-full rounded-none bg-[#25D366] hover:bg-[#1da851] text-white font-body text-xs tracking-[0.1em] uppercase"
+                    variant="outline"
+                    onClick={() => setStep(2)}
+                    className="flex-1 rounded-none border-foreground font-body text-xs tracking-[0.1em] uppercase"
                   >
-                    Confirm on WhatsApp
+                    Back
+                  </Button>
+                  <Button
+                    onClick={handleConfirm}
+                    disabled={!name || !email || !phone}
+                    className="flex-1 btn-beauty-filled border-0 rounded-none"
+                  >
+                    Confirm Booking
                   </Button>
                 </div>
               </div>
