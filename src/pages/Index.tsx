@@ -15,7 +15,16 @@ import ReviewsPanel from "@/components/ReviewsPanel";
 
 
 const Index = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [bookingOpen, setBookingOpen] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get("booking") === "true") {
+      setBookingOpen(true);
+      searchParams.delete("booking");
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   return (
     <div className="min-h-screen bg-background">
