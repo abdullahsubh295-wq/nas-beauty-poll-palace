@@ -93,3 +93,15 @@
     font-family: var(--font-display);
   }
 }
+
+/* Tidio chat button color override to match site primary (dark brown) */
+#tidio-chat iframe[style*="bottom"] {
+  color-scheme: light;
+}
+:root {
+  --tidio-color: hsl(12, 30%, 22%);
+}
+#tidio-chat .buttonWave,
+#tidio-chat [class*="button"] {
+  background-color: hsl(12, 30%, 22%) !important;
+}
