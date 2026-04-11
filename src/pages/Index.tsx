@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import SkinQuizSection from "@/components/SkinQuizSection";
@@ -14,7 +15,16 @@ import ReviewsPanel from "@/components/ReviewsPanel";
 
 
 const Index = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [bookingOpen, setBookingOpen] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get("booking") === "true") {
+      setBookingOpen(true);
+      searchParams.delete("booking");
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   return (
     <div className="min-h-screen bg-background">
