@@ -1,95 +1,97 @@
-import { useState } from "react";
-import { Star, ChevronRight, Send, Trash2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Star, ChevronRight, Send, Trash2, X } from "lucide-react";
 import { useAdmin } from "@/contexts/AdminContext";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface Review {
+  id: string;
   name: string;
   rating: number;
-  date: string;
+  created_at: string;
   text: string;
 }
 
-const defaultReviews: Review[] = [
-  {
-    name: "Ayesha K.",
-    rating: 5,
-    date: "2 weeks ago",
-    text: "Absolutely loved my facial! My skin has never felt this smooth. The staff was so welcoming and professional.",
-  },
-  {
-    name: "Priya M.",
-    rating: 5,
-    date: "1 month ago",
-    text: "Best waxing experience ever — quick, clean, and virtually painless. Will definitely be coming back!",
-  },
-  {
-    name: "Sara L.",
-    rating: 4,
-    date: "1 month ago",
-    text: "The bridal package was everything I needed before my big day. My skin was glowing and I felt so pampered.",
-  },
-  {
-    name: "Fatima R.",
-    rating: 5,
-    date: "3 weeks ago",
-    text: "I've tried so many salons but Naz Beauty Salon is on another level. The ambiance, the care, everything is top-notch.",
-  },
-  {
-    name: "Hina T.",
-    rating: 5,
-    date: "2 months ago",
-    text: "Got a hair treatment and it completely transformed my hair. So silky and healthy looking now!",
-  },
-  {
-    name: "Zara A.",
-    rating: 4,
-    date: "1 week ago",
-    text: "Love the skin consultation they offer. Very knowledgeable team and great product recommendations.",
-  },
-];
-
 const ReviewsPanel = () => {
   const { isAdmin } = useAdmin();
-  const [reviews, setReviews] = useState<Review[]>(defaultReviews);
+  const isMobile = useIsMobile();
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState("");
   const [text, setText] = useState("");
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
+  const [open, setOpen] = useState(false);
 
-  const avgRating = (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1);
+  const fetchReviews = async () => {
+    const { data, error } = await supabase
+      .from("reviews")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (!error && data) {
+      setReviews(data);
+    }
+  };
 
-  const handleSubmit = () => {
+  useEffect(() => {
+    fetchReviews();
+  }, []);
+
+  const avgRating = reviews.length
+    ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
+    : "0";
+
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) return "Today";
+    if (diffDays === 1) return "Yesterday";
+    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) > 1 ? "s" : ""} ago`;
+    return `${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) > 1 ? "s" : ""} ago`;
+  };
+
+  const handleSubmit = async () => {
     if (!name.trim() || !text.trim() || rating === 0) {
       toast({ title: "Please fill in your name, review, and select a star rating.", variant: "destructive" });
       return;
     }
-    const newReview: Review = {
+    const { error } = await supabase.from("reviews").insert({
       name: name.trim(),
       rating,
-      date: "Just now",
       text: text.trim(),
-    };
-    setReviews((prev) => [newReview, ...prev]);
+    });
+    if (error) {
+      toast({ title: "Failed to submit review. Please try again.", variant: "destructive" });
+      return;
+    }
     setName("");
     setText("");
     setRating(0);
     setShowForm(false);
     toast({ title: "Thank you! Your review has been posted." });
+    fetchReviews();
   };
 
-  const handleDelete = (index: number) => {
-    setReviews((prev) => prev.filter((_, i) => i !== index));
+  const handleDelete = async (id: string) => {
+    const { error } = await supabase.from("reviews").delete().eq("id", id);
+    if (error) {
+      toast({ title: "Failed to delete review.", variant: "destructive" });
+      return;
+    }
     toast({ title: "Review deleted." });
+    fetchReviews();
   };
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <button className="fixed right-0 top-1/2 -translate-y-1/2 z-40 bg-primary text-primary-foreground px-2 py-4 rounded-l-lg shadow-lg hover:pr-3 transition-all duration-300 flex flex-col items-center gap-1 group">
           <Star className="h-4 w-4 fill-current" />
@@ -100,6 +102,15 @@ const ReviewsPanel = () => {
         </button>
       </SheetTrigger>
       <SheetContent side="right" className="w-full sm:max-w-md overflow-y-auto p-0">
+        {isMobile && (
+          <button
+            onClick={() => setOpen(false)}
+            className="absolute right-4 top-4 z-20 rounded-sm p-1 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          >
+            <X className="h-5 w-5" />
+            <span className="sr-only">Close</span>
+          </button>
+        )}
         <SheetHeader className="p-6 pb-4 border-b border-border sticky top-0 bg-background z-10">
           <SheetTitle className="font-display text-2xl tracking-wide">
             Client Reviews
@@ -164,8 +175,8 @@ const ReviewsPanel = () => {
         )}
 
         <div className="divide-y divide-border">
-          {reviews.map((review, index) => (
-            <div key={index} className="p-6 space-y-3">
+          {reviews.map((review) => (
+            <div key={review.id} className="p-6 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 rounded-full bg-accent flex items-center justify-center">
@@ -175,7 +186,7 @@ const ReviewsPanel = () => {
                   </div>
                   <div>
                     <p className="font-medium text-sm text-foreground">{review.name}</p>
-                    <p className="text-xs text-muted-foreground">{review.date}</p>
+                    <p className="text-xs text-muted-foreground">{formatDate(review.created_at)}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -193,7 +204,7 @@ const ReviewsPanel = () => {
                   </div>
                   {isAdmin && (
                     <button
-                      onClick={() => handleDelete(index)}
+                      onClick={() => handleDelete(review.id)}
                       className="p-1 rounded hover:bg-destructive/10 transition-colors"
                       title="Delete review"
                     >
