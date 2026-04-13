@@ -84,6 +84,7 @@ const Navbar = ({ onBookNow }: NavbarProps) => {
   };
 
   return (
+    <>
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-16 md:h-20">
