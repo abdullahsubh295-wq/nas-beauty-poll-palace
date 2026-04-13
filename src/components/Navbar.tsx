@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, Search, ShoppingBag, ChevronDown } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
 
 interface NavbarProps {
   onBookNow?: () => void;
