@@ -53,8 +53,10 @@ const Navbar = ({ onBookNow }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
+  const [cartOpen, setCartOpen] = useState(false);
   const navigate = useNavigate();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { totalItems } = useCart();
 
   const handleNavClick = (label: string, href: string, e: React.MouseEvent) => {
     if (label === "BOOK NOW" && onBookNow) {
