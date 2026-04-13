@@ -223,6 +223,8 @@ const Navbar = ({ onBookNow }: NavbarProps) => {
         </div>
       )}
     </nav>
+    <CartDrawer open={cartOpen} onOpenChange={setCartOpen} />
+    </>
   );
 };
 
