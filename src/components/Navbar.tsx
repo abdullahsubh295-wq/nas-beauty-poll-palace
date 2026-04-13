@@ -39,11 +39,12 @@ const navLinks: NavItem[] = [
   },
   {
     label: "SHOP",
-    href: "#shop",
+    href: "/shop",
     dropdown: [
-      { label: "Skincare", href: "#shop" },
-      { label: "Serums & Oils", href: "#shop" },
-      { label: "Gift Sets", href: "#shop" },
+      { label: "All Products", href: "/shop" },
+      { label: "Serums & Oils", href: "/shop" },
+      { label: "Moisturizers", href: "/shop" },
+      { label: "Gift Sets", href: "/shop" },
     ],
   },
 ];
