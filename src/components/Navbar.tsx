@@ -1,6 +1,8 @@
 import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, Search, ShoppingBag, ChevronDown } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
+import CartDrawer from "@/components/CartDrawer";
 
 interface NavbarProps {
   onBookNow?: () => void;
@@ -38,11 +40,12 @@ const navLinks: NavItem[] = [
   },
   {
     label: "SHOP",
-    href: "#shop",
+    href: "/shop",
     dropdown: [
-      { label: "Skincare", href: "#shop" },
-      { label: "Serums & Oils", href: "#shop" },
-      { label: "Gift Sets", href: "#shop" },
+      { label: "All Products", href: "/shop" },
+      { label: "Serums & Oils", href: "/shop" },
+      { label: "Moisturizers", href: "/shop" },
+      { label: "Gift Sets", href: "/shop" },
     ],
   },
 ];
@@ -51,8 +54,10 @@ const Navbar = ({ onBookNow }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
+  const [cartOpen, setCartOpen] = useState(false);
   const navigate = useNavigate();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { totalItems } = useCart();
 
   const handleNavClick = (label: string, href: string, e: React.MouseEvent) => {
     if (label === "BOOK NOW" && onBookNow) {
@@ -79,6 +84,7 @@ const Navbar = ({ onBookNow }: NavbarProps) => {
   };
 
   return (
+    <>
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-16 md:h-20">
@@ -151,8 +157,13 @@ const Navbar = ({ onBookNow }: NavbarProps) => {
             <button className="text-foreground hover:text-muted-foreground transition-colors">
               <Search size={18} />
             </button>
-            <button className="text-foreground hover:text-muted-foreground transition-colors relative">
+            <button onClick={() => setCartOpen(true)} className="text-foreground hover:text-muted-foreground transition-colors relative">
               <ShoppingBag size={18} />
+              {totalItems > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 bg-primary text-primary-foreground text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                  {totalItems}
+                </span>
+              )}
             </button>
           </div>
         </div>
@@ -213,6 +224,8 @@ const Navbar = ({ onBookNow }: NavbarProps) => {
         </div>
       )}
     </nav>
+    <CartDrawer open={cartOpen} onOpenChange={setCartOpen} />
+    </>
   );
 };
 
