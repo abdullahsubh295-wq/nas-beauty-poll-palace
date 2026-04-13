@@ -155,8 +155,13 @@ const Navbar = ({ onBookNow }: NavbarProps) => {
             <button className="text-foreground hover:text-muted-foreground transition-colors">
               <Search size={18} />
             </button>
-            <button className="text-foreground hover:text-muted-foreground transition-colors relative">
+            <button onClick={() => setCartOpen(true)} className="text-foreground hover:text-muted-foreground transition-colors relative">
               <ShoppingBag size={18} />
+              {totalItems > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 bg-primary text-primary-foreground text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                  {totalItems}
+                </span>
+              )}
             </button>
           </div>
         </div>
