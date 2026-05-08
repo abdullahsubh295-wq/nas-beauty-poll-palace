@@ -92,6 +92,21 @@
     @apply text-3xl md:text-4xl font-normal;
     font-family: var(--font-display);
   }
+  .hover-lift {
+    @apply transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-2xl;
+  }
+  .img-zoom {
+    @apply transition-transform duration-700 ease-out group-hover:scale-110;
+  }
+}
+
+@layer utilities {
+  html {
+    scroll-behavior: smooth;
+  }
+  .page-fade {
+    animation: fade-in 0.5s ease-out;
+  }
 }
 
 /* Tidio chat button color override to match site primary (dark brown) */

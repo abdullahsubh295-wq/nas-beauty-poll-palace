@@ -10,37 +10,43 @@ const products = [
   { name: "SilkWave Cleanser", price: "$48.00", image: productCleanser },
 ];
 
+import Reveal from "@/components/Reveal";
+
 const ProductsSection = () => {
   return (
     <section id="shop" className="py-20 md:py-28 px-6">
       <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-12">
-          <h2 className="section-title">Shop Our Collection</h2>
-          <a href="#" className="text-xs tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors">
-            See all
-          </a>
-        </div>
+        <Reveal>
+          <div className="flex items-center justify-between mb-12">
+            <h2 className="section-title">Shop Our Collection</h2>
+            <a href="/shop" className="text-xs tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors story-link">
+              See all
+            </a>
+          </div>
+        </Reveal>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {products.map((product) => (
-            <div key={product.name} className="group cursor-pointer space-y-3">
-              <div className="aspect-[3/4] overflow-hidden bg-secondary">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                  width={600}
-                  height={800}
-                />
+          {products.map((product, i) => (
+            <Reveal key={product.name} delay={i * 100} direction="up">
+              <div className="group cursor-pointer space-y-3 hover-lift rounded-md p-2">
+                <div className="aspect-[3/4] overflow-hidden bg-secondary rounded-sm">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-cover img-zoom"
+                    loading="lazy"
+                    width={600}
+                    height={800}
+                  />
+                </div>
+                <div className="space-y-1 px-1">
+                  <h3 className="font-display text-sm">{product.name}</h3>
+                  <p className="text-muted-foreground text-sm font-body">{product.price}</p>
+                </div>
+                <button className="btn-beauty text-[10px] w-full text-center py-2.5">
+                  Add to Cart
+                </button>
               </div>
-              <div className="space-y-1">
-                <h3 className="font-display text-sm">{product.name}</h3>
-                <p className="text-muted-foreground text-sm font-body">{product.price}</p>
-              </div>
-              <button className="btn-beauty text-[10px] w-full text-center py-2.5">
-                Add to Cart
-              </button>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>

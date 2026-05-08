@@ -9,6 +9,7 @@ import NewServiceSection from "@/components/NewServiceSection";
 import FeaturedProductSection from "@/components/FeaturedProductSection";
 import TrustBadges from "@/components/TrustBadges";
 import LocationsSection from "@/components/LocationsSection";
+import MapSection from "@/components/MapSection";
 import Footer from "@/components/Footer";
 import BookingDialog from "@/components/BookingDialog";
 import ReviewsPanel from "@/components/ReviewsPanel";
@@ -29,7 +30,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar onBookNow={() => setBookingOpen(true)} />
-      <main className="pt-16 md:pt-20">
+      <main className="pt-16 md:pt-20 page-fade">
         <HeroSection />
         <SkinQuizSection />
         <ServicesSection onBookNow={() => setBookingOpen(true)} />
@@ -38,6 +39,7 @@ const Index = () => {
         <FeaturedProductSection />
         <TrustBadges />
         <LocationsSection />
+        <MapSection />
       </main>
       <Footer />
       <BookingDialog open={bookingOpen} onOpenChange={setBookingOpen} />
