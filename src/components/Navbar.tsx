@@ -123,14 +123,14 @@ const Navbar = ({ onBookNow }: NavbarProps) => {
 
                 {/* Dropdown */}
                 {link.dropdown && openDropdown === link.label && (
-                  <div className="absolute top-full left-0 pt-1 min-w-[200px]">
-                    <div className="bg-background border border-border shadow-lg py-2">
+                  <div className="absolute top-full left-0 pt-1 min-w-[210px] animate-fade-in">
+                    <div className="bg-background/95 backdrop-blur-md border border-border rounded-md shadow-xl py-2 overflow-hidden">
                       {link.dropdown.map((item) => (
                         <a
                           key={item.label}
                           href={item.href}
                           onClick={(e) => handleNavClick(item.label, item.href, e)}
-                          className="block px-5 py-2.5 text-[11px] tracking-[0.1em] text-foreground hover:bg-secondary transition-colors font-body"
+                          className="block px-5 py-2.5 text-[11px] tracking-[0.1em] text-foreground hover:bg-secondary hover:pl-7 transition-all duration-200 font-body"
                         >
                           {item.label}
                         </a>
