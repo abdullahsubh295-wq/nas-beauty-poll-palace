@@ -12,8 +12,6 @@ import LocationsSection from "@/components/LocationsSection";
 import Footer from "@/components/Footer";
 import BookingDialog from "@/components/BookingDialog";
 import ReviewsPanel from "@/components/ReviewsPanel";
-import GoogleReviewsSection from "@/components/GoogleReviewsSection";
-import CustomCursor from "@/components/CustomCursor";
 
 
 const Index = () => {
@@ -39,13 +37,12 @@ const Index = () => {
         <NewServiceSection onBookNow={() => setBookingOpen(true)} />
         <FeaturedProductSection />
         <TrustBadges />
-        <GoogleReviewsSection />
         <LocationsSection />
       </main>
       <Footer />
       <BookingDialog open={bookingOpen} onOpenChange={setBookingOpen} />
       <ReviewsPanel />
-      <CustomCursor />
+      
     </div>
   );
 };
