@@ -30,7 +30,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar onBookNow={() => setBookingOpen(true)} />
-      <main className="pt-16 md:pt-20">
+      <main className="pt-16 md:pt-20 page-fade">
         <HeroSection />
         <SkinQuizSection />
         <ServicesSection onBookNow={() => setBookingOpen(true)} />
