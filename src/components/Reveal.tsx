@@ -7,7 +7,6 @@ interface RevealProps {
   direction?: Direction;
   delay?: number;
   className?: string;
-  as?: keyof JSX.IntrinsicElements;
 }
 
 const initialClasses: Record<Direction, string> = {
@@ -17,7 +16,7 @@ const initialClasses: Record<Direction, string> = {
   zoom: "opacity-0 scale-95",
 };
 
-const Reveal = ({ children, direction = "up", delay = 0, className = "", as: Tag = "div" }: RevealProps) => {
+const Reveal = ({ children, direction = "up", delay = 0, className = "" }: RevealProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -38,15 +37,15 @@ const Reveal = ({ children, direction = "up", delay = 0, className = "", as: Tag
   }, []);
 
   return (
-    <Tag
-      ref={ref as never}
+    <div
+      ref={ref}
       style={{ transitionDelay: `${delay}ms` }}
       className={`transition-all duration-700 ease-out will-change-transform ${
         visible ? "opacity-100 translate-x-0 translate-y-0 scale-100" : initialClasses[direction]
       } ${className}`}
     >
       {children}
-    </Tag>
+    </div>
   );
 };
 
