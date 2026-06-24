@@ -27,7 +27,7 @@ const ProductsSection = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {products.map((product, i) => (
             <Reveal key={product.name} delay={i * 100} direction="up">
-              <div className="group cursor-pointer space-y-3 hover-lift rounded-md p-2">
+              <div className="group cursor-pointer space-y-3 hover-3d rounded-md p-2 bg-background">
                 <div className="aspect-[3/4] overflow-hidden bg-secondary rounded-sm">
                   <img
                     src={product.image}

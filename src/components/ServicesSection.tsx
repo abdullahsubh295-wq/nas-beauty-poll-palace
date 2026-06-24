@@ -25,7 +25,7 @@ const ServicesSection = ({ onBookNow }: { onBookNow?: () => void }) => {
         <div className="grid md:grid-cols-3 gap-8">
           {services.map((service, i) => (
             <Reveal key={service.name} delay={i * 120} direction="up">
-              <div className="text-center space-y-4 p-8 bg-background border border-border rounded-md hover-lift h-full">
+              <div className="text-center space-y-4 p-8 bg-background border border-border rounded-md hover-3d h-full">
                 <h3 className="font-display text-xl italic">{service.name}</h3>
                 <p className="text-muted-foreground font-body text-sm leading-relaxed">
                   {service.description}
