@@ -9,12 +9,12 @@ const Footer = () => {
           </p>
         </div>
         <div className="space-y-3">
-          <h4 className="text-xs tracking-[0.2em] uppercase">Shop</h4>
+          <h4 className="text-xs tracking-[0.2em] uppercase">Explore</h4>
           <ul className="space-y-2 text-sm text-primary-foreground/70 font-body">
-            <li><a href="#" className="hover:text-primary-foreground transition-colors">All Products</a></li>
-            <li><a href="#" className="hover:text-primary-foreground transition-colors">Skincare</a></li>
-            <li><a href="#" className="hover:text-primary-foreground transition-colors">Tools</a></li>
-            <li><a href="#" className="hover:text-primary-foreground transition-colors">Gift Cards</a></li>
+            <li><a href="/" className="hover:text-primary-foreground transition-colors">Home</a></li>
+            <li><a href="/service-menu" className="hover:text-primary-foreground transition-colors">Services</a></li>
+            <li><a href="/skin-quiz" className="hover:text-primary-foreground transition-colors">Skin Quiz</a></li>
+            <li><a href="#about" className="hover:text-primary-foreground transition-colors">About Us</a></li>
           </ul>
         </div>
         <div className="space-y-3">
