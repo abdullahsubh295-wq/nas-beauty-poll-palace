@@ -1,5 +1,5 @@
 import heroImage from "@/assets/hero-beauty.jpg";
-import heroVideo from "@/assets/hero-beauty.mp4.asset.json";
+import heroVideo from "@/assets/hero-salon-walkthrough.mp4.asset.json";
 
 const HeroSection = () => {
   return (
