@@ -4,16 +4,13 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import SkinQuizSection from "@/components/SkinQuizSection";
 import ServicesSection from "@/components/ServicesSection";
-import ProductsSection from "@/components/ProductsSection";
 import NewServiceSection from "@/components/NewServiceSection";
-import FeaturedProductSection from "@/components/FeaturedProductSection";
 import TrustBadges from "@/components/TrustBadges";
 import LocationsSection from "@/components/LocationsSection";
 import MapSection from "@/components/MapSection";
 import Footer from "@/components/Footer";
 import BookingDialog from "@/components/BookingDialog";
 import ReviewsPanel from "@/components/ReviewsPanel";
-
 
 const Index = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -34,9 +31,7 @@ const Index = () => {
         <HeroSection />
         <SkinQuizSection />
         <ServicesSection onBookNow={() => setBookingOpen(true)} />
-        <ProductsSection />
         <NewServiceSection onBookNow={() => setBookingOpen(true)} />
-        <FeaturedProductSection />
         <TrustBadges />
         <LocationsSection />
         <MapSection />
@@ -44,7 +39,6 @@ const Index = () => {
       <Footer />
       <BookingDialog open={bookingOpen} onOpenChange={setBookingOpen} />
       <ReviewsPanel />
-      
     </div>
   );
 };
