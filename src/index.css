@@ -93,10 +93,16 @@
     font-family: var(--font-display);
   }
   .hover-lift {
-    @apply transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-2xl;
+    @apply transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-2xl;
   }
   .img-zoom {
-    @apply transition-transform duration-700 ease-out group-hover:scale-110;
+    @apply transition-transform duration-500 ease-out group-hover:scale-110;
+  }
+  .hover-3d {
+    @apply transition-transform duration-300 ease-out [transform-style:preserve-3d] hover:[transform:perspective(1000px)_rotateX(4deg)_rotateY(-4deg)_translateY(-4px)] hover:shadow-2xl;
+  }
+  .tilt-on-hover {
+    @apply transition-transform duration-300 ease-out hover:[transform:perspective(800px)_rotateY(-6deg)_scale(1.03)];
   }
 }
 
@@ -105,7 +111,7 @@
     scroll-behavior: smooth;
   }
   .page-fade {
-    animation: fade-in 0.5s ease-out;
+    animation: fade-in 0.2s ease-out;
   }
 }
 

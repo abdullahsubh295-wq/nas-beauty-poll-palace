@@ -40,7 +40,7 @@ const Reveal = ({ children, direction = "up", delay = 0, className = "" }: Revea
     <div
       ref={ref}
       style={{ transitionDelay: `${delay}ms` }}
-      className={`transition-all duration-700 ease-out will-change-transform ${
+      className={`transition-all duration-300 ease-out will-change-transform ${
         visible ? "opacity-100 translate-x-0 translate-y-0 scale-100" : initialClasses[direction]
       } ${className}`}
     >
