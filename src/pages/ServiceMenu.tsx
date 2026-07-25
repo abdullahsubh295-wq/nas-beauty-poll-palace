@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import { useState } from "react";
 import BookingDialog from "@/components/BookingDialog";
 import { Clock } from "lucide-react";
+import Reveal from "@/components/Reveal";
 
 const services = [
   {
@@ -76,51 +77,62 @@ const ServiceMenu = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar onBookNow={() => setBookingOpen(true)} />
-      <main className="pt-16 md:pt-20">
+      <main className="pt-16 md:pt-20 page-fade">
         {/* Hero */}
-        <section className="py-20 md:py-28 bg-secondary text-center px-6">
-          <p className="section-subtitle mb-3">Naz Beauty Salon</p>
-          <h1 className="font-display text-4xl md:text-5xl font-normal mb-4">Service Menu</h1>
-          <p className="text-muted-foreground font-body max-w-lg mx-auto">
-            From signature facials to advanced treatments, every service is designed to help you glow from within.
-          </p>
+        <section className="py-20 md:py-28 bg-secondary text-center px-6 relative overflow-hidden">
+          <span aria-hidden className="pointer-events-none absolute -top-24 left-1/4 w-96 h-96 rounded-full bg-[hsl(var(--gold)/0.12)] blur-3xl float-slow" />
+          <span aria-hidden className="pointer-events-none absolute -bottom-24 right-1/4 w-96 h-96 rounded-full bg-[hsl(var(--accent)/0.35)] blur-3xl float-slow" style={{ animationDelay: "-2s" }} />
+          <div className="relative">
+            <Reveal><p className="section-subtitle mb-3">Naz Beauty Salon</p></Reveal>
+            <Reveal delay={80}>
+              <h1 className="font-display text-4xl md:text-5xl font-normal mb-4">Service Menu</h1>
+            </Reveal>
+            <Reveal delay={160}>
+              <p className="font-lead italic text-muted-foreground max-w-lg mx-auto">
+                From signature facials to advanced treatments, every service is designed to help you glow from within.
+              </p>
+            </Reveal>
+          </div>
         </section>
 
         {/* Services */}
         <section className="py-16 md:py-24 px-6">
           <div className="max-w-4xl mx-auto space-y-16">
-            {services.map((category) => (
+            {services.map((category, catIdx) => (
               <div key={category.category}>
-                <h2 className="font-display text-2xl md:text-3xl mb-8 text-center">{category.category}</h2>
+                <Reveal>
+                  <h2 className="font-display text-2xl md:text-3xl mb-8 text-center">{category.category}</h2>
+                </Reveal>
                 <div className="space-y-6">
-                  {category.items.map((item) => (
-                    <div
-                      key={item.name}
-                      className="border border-border p-6 md:p-8 hover:shadow-md transition-shadow duration-300 group"
-                    >
-                      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                        <div className="flex-1 space-y-2">
-                          <h3 className="font-display text-xl italic">{item.name}</h3>
-                          <p className="text-muted-foreground font-body text-sm leading-relaxed max-w-xl">
-                            {item.description}
-                          </p>
-                          <div className="flex items-center gap-4 pt-1">
-                            <span className="flex items-center gap-1 text-xs text-muted-foreground font-body">
-                              <Clock size={12} /> {item.duration}
-                            </span>
+                  {category.items.map((item, i) => (
+                    <Reveal key={item.name} delay={i * 100} direction={i % 2 === 0 ? "left" : "right"}>
+                      <div
+                        className="glow-border p-6 md:p-8 rounded-md group bg-background"
+                      >
+                        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                          <div className="flex-1 space-y-2">
+                            <h3 className="font-display text-xl italic transition-colors duration-300 group-hover:text-[hsl(var(--gold))]">{item.name}</h3>
+                            <p className="text-muted-foreground font-body text-sm leading-relaxed max-w-xl">
+                              {item.description}
+                            </p>
+                            <div className="flex items-center gap-4 pt-1">
+                              <span className="flex items-center gap-1 text-xs text-muted-foreground font-body">
+                                <Clock size={12} /> {item.duration}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex flex-row md:flex-col items-center md:items-end gap-3">
+                            <span className="font-display text-xl">{item.price}</span>
+                            <button
+                              onClick={() => setBookingOpen(true)}
+                              className="btn-beauty text-[10px] whitespace-nowrap hover:scale-105"
+                            >
+                              Book Now
+                            </button>
                           </div>
                         </div>
-                        <div className="flex flex-row md:flex-col items-center md:items-end gap-3">
-                          <span className="font-display text-xl">{item.price}</span>
-                          <button
-                            onClick={() => setBookingOpen(true)}
-                            className="btn-beauty text-[10px] whitespace-nowrap"
-                          >
-                            Book Now
-                          </button>
-                        </div>
                       </div>
-                    </div>
+                    </Reveal>
                   ))}
                 </div>
               </div>
@@ -130,13 +142,19 @@ const ServiceMenu = () => {
 
         {/* CTA */}
         <section className="py-16 bg-foreground text-primary-foreground text-center px-6">
-          <h2 className="font-display text-3xl mb-4">Not sure which treatment is right for you?</h2>
-          <p className="font-body text-primary-foreground/70 mb-8 max-w-md mx-auto">
-            Take our quick Skin Check Quiz and we'll recommend the perfect treatment for your skin type.
-          </p>
-          <a href="/" className="inline-block px-10 py-3.5 text-xs tracking-[0.2em] uppercase font-medium border border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-foreground transition-all duration-300">
-            Take the Quiz
-          </a>
+          <Reveal>
+            <h2 className="font-display text-3xl mb-4">Not sure which treatment is right for you?</h2>
+          </Reveal>
+          <Reveal delay={100}>
+            <p className="font-lead italic text-primary-foreground/70 mb-8 max-w-md mx-auto">
+              Take our quick Skin Check Quiz and we'll recommend the perfect treatment for your skin type.
+            </p>
+          </Reveal>
+          <Reveal delay={180}>
+            <a href="/" className="inline-block px-10 py-3.5 text-xs tracking-[0.2em] uppercase font-medium border border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-foreground transition-all duration-300 hover:scale-105">
+              Take the Quiz
+            </a>
+          </Reveal>
         </section>
       </main>
       <Footer />
