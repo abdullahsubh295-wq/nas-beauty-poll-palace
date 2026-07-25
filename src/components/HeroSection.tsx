@@ -26,10 +26,10 @@ const HeroSection = () => {
           <strong>designed for real life</strong>
         </p>
         <a
-          href="#shop"
+          href="/service-menu"
           className="inline-block px-10 py-3.5 text-xs tracking-[0.2em] uppercase font-medium border border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-foreground transition-all duration-300 hover:scale-105"
         >
-          Shop Now
+          Book Your Glow
         </a>
       </div>
     </section>
