@@ -16,14 +16,14 @@ const HeroSection = () => {
       </video>
       <div className="absolute inset-0 bg-foreground/45" />
       <div className="relative z-10 text-center text-primary-foreground px-6 animate-fade-in">
-        <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-normal mb-4">
+        <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-normal mb-6">
           Glow From Within
         </h1>
-        <p className="font-body text-base md:text-lg font-light mb-2 max-w-md mx-auto">
-          <strong>clean skincare born in the spa,</strong>
+        <p className="font-lead italic text-lg md:text-2xl font-light mb-2 max-w-xl mx-auto">
+          Clean skincare, born in the spa —
         </p>
-        <p className="font-body text-base md:text-lg font-light mb-8 max-w-md mx-auto">
-          <strong>designed for real life</strong>
+        <p className="font-lead italic text-lg md:text-2xl font-light mb-10 max-w-xl mx-auto">
+          designed for real life.
         </p>
         <a
           href="/service-menu"
