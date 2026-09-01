@@ -1,9 +1,9 @@
-import { Star, Truck, MapPin } from "lucide-react";
+import { Star, Sparkles, MapPin } from "lucide-react";
 
 const badges = [
-  { icon: Star, title: "Five Star Reviews", desc: "Over 500+ Five Star Reviews" },
-  { icon: Truck, title: "Free Shipping", desc: "Free shipping on orders over $50" },
-  { icon: MapPin, title: "Parlor Pickup", desc: "Shop online and pick up in person" },
+  { icon: Star, title: "500+ Five-Star Reviews", desc: "Rated 4.9 by clients across the city" },
+  { icon: Sparkles, title: "Licensed Estheticians", desc: "Advanced facial & peel certified" },
+  { icon: MapPin, title: "Easy To Reach", desc: "Free parking · Same-week appointments" },
 ];
 
 const TrustBadges = () => {
@@ -27,7 +27,7 @@ const TrustBadges = () => {
 
             {/* Label */}
             <div className="relative grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-2 px-8 md:px-14 py-10 md:py-12 text-center">
-              {badges.map((badge, i) => (
+              {badges.map((badge) => (
                 <div
                   key={badge.title}
                   className="flex flex-col items-center gap-2 md:px-4 md:border-l md:border-foreground/10 first:md:border-l-0 transition-transform duration-300 hover:-translate-y-1"
