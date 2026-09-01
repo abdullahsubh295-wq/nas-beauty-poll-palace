@@ -1,9 +1,9 @@
-import { Star, ShieldCheck, MapPin } from "lucide-react";
+import { Star, Truck, MapPin } from "lucide-react";
 
 const badges = [
-  { icon: Star, title: "Five Star Reviews", desc: "Over 500+ five-star reviews from real clients" },
-  { icon: ShieldCheck, title: "Certified Estheticians", desc: "Licensed pros with 10+ years of expertise" },
-  { icon: MapPin, title: "Parlor Pickup", desc: "Book online and visit us in person" },
+  { icon: Star, title: "Five Star Reviews", desc: "Over 500+ Five Star Reviews" },
+  { icon: Truck, title: "Free Shipping", desc: "Free shipping on orders over $50" },
+  { icon: MapPin, title: "Parlor Pickup", desc: "Shop online and pick up in person" },
 ];
 
 const TrustBadges = () => {

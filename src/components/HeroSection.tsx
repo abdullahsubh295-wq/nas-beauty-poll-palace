@@ -16,20 +16,20 @@ const HeroSection = () => {
       </video>
       <div className="absolute inset-0 bg-foreground/45" />
       <div className="relative z-10 text-center text-primary-foreground px-6 animate-fade-in">
-        <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-normal mb-6">
+        <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-normal mb-4">
           Glow From Within
         </h1>
-        <p className="font-lead italic text-lg md:text-2xl font-light mb-2 max-w-xl mx-auto">
-          Clean skincare, born in the spa —
+        <p className="font-body text-base md:text-lg font-light mb-2 max-w-md mx-auto">
+          <strong>clean skincare born in the spa,</strong>
         </p>
-        <p className="font-lead italic text-lg md:text-2xl font-light mb-10 max-w-xl mx-auto">
-          designed for real life.
+        <p className="font-body text-base md:text-lg font-light mb-8 max-w-md mx-auto">
+          <strong>designed for real life</strong>
         </p>
         <a
-          href="/service-menu"
+          href="#shop"
           className="inline-block px-10 py-3.5 text-xs tracking-[0.2em] uppercase font-medium border border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-foreground transition-all duration-300 hover:scale-105"
         >
-          Book Your Glow
+          Shop Now
         </a>
       </div>
     </section>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Lato:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lato:wght@300;400;500;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -45,7 +45,6 @@
 
     --font-display: 'Playfair Display', serif;
     --font-body: 'Lato', sans-serif;
-    --font-lead: 'Cormorant Garamond', serif;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -100,33 +99,10 @@
     @apply transition-transform duration-500 ease-out group-hover:scale-110;
   }
   .hover-3d {
-    @apply transition-transform duration-500 ease-out [transform-style:preserve-3d] hover:[transform:perspective(1000px)_rotateX(4deg)_rotateY(-4deg)_translateY(-6px)] hover:shadow-2xl;
+    @apply transition-transform duration-300 ease-out [transform-style:preserve-3d] hover:[transform:perspective(1000px)_rotateX(4deg)_rotateY(-4deg)_translateY(-4px)] hover:shadow-2xl;
   }
   .tilt-on-hover {
-    @apply transition-transform duration-500 ease-out hover:[transform:perspective(800px)_rotateY(-6deg)_scale(1.03)];
-  }
-  .font-lead {
-    font-family: var(--font-lead);
-    @apply text-lg md:text-xl leading-relaxed tracking-wide;
-  }
-  .shine-on-hover {
-    @apply relative overflow-hidden;
-  }
-  .shine-on-hover::after {
-    content: "";
-    @apply absolute inset-0 -translate-x-full skew-x-12 bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 ease-out pointer-events-none;
-  }
-  .shine-on-hover:hover::after {
-    @apply translate-x-full;
-  }
-  .glow-border {
-    @apply relative;
-    box-shadow: 0 0 0 1px hsl(var(--border)), 0 10px 30px -12px hsl(var(--foreground)/0.15);
-    transition: box-shadow 0.4s ease, transform 0.4s ease;
-  }
-  .glow-border:hover {
-    box-shadow: 0 0 0 1px hsl(var(--gold)/0.6), 0 20px 40px -12px hsl(var(--gold)/0.35);
-    transform: translateY(-4px);
+    @apply transition-transform duration-300 ease-out hover:[transform:perspective(800px)_rotateY(-6deg)_scale(1.03)];
   }
 }
 
@@ -135,18 +111,7 @@
     scroll-behavior: smooth;
   }
   .page-fade {
-    animation: page-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  }
-  @keyframes page-in {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .float-slow {
-    animation: float-slow 6s ease-in-out infinite;
-  }
-  @keyframes float-slow {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+    animation: fade-in 0.2s ease-out;
   }
 }
 

@@ -20,10 +20,10 @@ const Footer = () => {
         <div className="space-y-3">
           <h4 className="text-xs tracking-[0.2em] uppercase">Services</h4>
           <ul className="space-y-2 text-sm text-primary-foreground/70 font-body">
-            <li><a href="/service-menu" className="hover:text-primary-foreground transition-colors">Facials</a></li>
-            <li><a href="/service-menu" className="hover:text-primary-foreground transition-colors">Chemical Peels</a></li>
-            <li><a href="/service-menu" className="hover:text-primary-foreground transition-colors">Brows & Lashes</a></li>
-            <li><a href="/service-menu" className="hover:text-primary-foreground transition-colors">Book Now</a></li>
+            <li><a href="#" className="hover:text-primary-foreground transition-colors">Facials</a></li>
+            <li><a href="#" className="hover:text-primary-foreground transition-colors">Chemical Peels</a></li>
+            <li><a href="#" className="hover:text-primary-foreground transition-colors">Brows & Lashes</a></li>
+            <li><a href="#" className="hover:text-primary-foreground transition-colors">Book Now</a></li>
           </ul>
         </div>
         <div className="space-y-3">
