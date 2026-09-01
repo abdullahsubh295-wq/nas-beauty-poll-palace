@@ -8,8 +8,9 @@ import AdminLoginDialog from "@/components/AdminLoginDialog";
 import Index from "./pages/Index.tsx";
 import ServiceMenu from "./pages/ServiceMenu.tsx";
 import SkinQuiz from "./pages/SkinQuiz.tsx";
+import About from "./pages/About.tsx";
 import NotFound from "./pages/NotFound.tsx";
-import ScrollToTop from "./components/ScrollToTop";
+import PageTransition from "./components/PageTransition";
 
 const queryClient = new QueryClient();
 
@@ -20,14 +21,18 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <ScrollToTop />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/service-menu" element={<ServiceMenu />} />
-            <Route path="/skin-quiz" element={<SkinQuiz />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <PageTransition>
+            {(location) => (
+              <Routes location={location}>
+                <Route path="/" element={<Index />} />
+                <Route path="/service-menu" element={<ServiceMenu />} />
+                <Route path="/skin-quiz" element={<SkinQuiz />} />
+                <Route path="/about" element={<About />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            )}
+          </PageTransition>
         </BrowserRouter>
         <AdminLoginDialog />
       </AdminProvider>
